@@ -1,27 +1,30 @@
-/*
-  This is a reasonable starting point for the CSS in Sprint 1.
-  Positioning in CSS can sometimes be annoying to manage, so we've opted to 
-  give you this starter CSS. Feel free to modify it as you wish, though.
-*/
+.program {
+  display: flex;
+  height: 80vh;
+  border: 1px solid grey;
+}
 
 .repl {
-  position: relative;
-  min-height: 95vh;
+  width: 50%;
+  border: 1px solid grey;
 }
 
 .repl-history {
-  height: 85vh;
-  margin: auto;
+  height: 90%;
   display: block;
   overflow: scroll;
 }
 
 .repl-input {
-  margin: auto;
   display: flex;
 }
+
 .repl-command-box {
   width: 90%;
-  margin: auto;
   display: block;
+}
+
+.viewer {
+  width: 50%;
+  border: 1px solid grey;
 }

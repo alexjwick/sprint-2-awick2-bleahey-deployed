@@ -12,23 +12,28 @@
     <link rel="stylesheet" href="../styles/main.css" type="text/css" />
   </head>
   <body>
-    <h1>Echo</h1>
+    <h1 class="title">Echo</h1>
     <!-- Tell the browser what to show if JavaScript/TypeScript is disabled. -->
     <noscript>This example requires JavaScript to run.</noscript>
     <!-- Prepare a region of the page to hold the entire REPL interface -->
-    <div class="repl">
-      <!-- Prepare a region of the page to hold the command history -->
-      <div class="repl-history"></div>
-      <hr />
-      <!-- Prepare a region of the page to hold the command input box -->
-      <div class="repl-input">
-        <input
-          type="text"
-          class="repl-command-box"
-          placeholder="Enter command here"
-        />
-        <button class="submit-button">Submit</button>
+    <div class="program">
+      <!-- The REPL will be on the left side of the page-->
+      <div class="repl">
+        <!-- Prepare a region of the page to hold the command history -->
+        <div class="repl-history"></div>
+        <hr />
+        <!-- Prepare a region of the page to hold the command input box -->
+        <div class="repl-input">
+          <input
+            type="text"
+            class="repl-command-box"
+            placeholder="Enter command here"
+          />
+          <button class="submit-button">Submit</button>
+        </div>
       </div>
+      <!-- The viewer will be on the right side of the page-->
+      <div class="viewer"></div>
     </div>
     <!-- Load the script! Note: the .js extension is because browsers don't use TypeScript
     directly. Instead, the author of the site needs to compile the TypeScript to JavaScript. -->

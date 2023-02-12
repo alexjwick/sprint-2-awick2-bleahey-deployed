@@ -4,6 +4,7 @@
 window.onload = () => {
   prepareTextInput();
   prepareButtonPress();
+  prepareREPLHistory();
 
   // If you're adding an event for a button click, do something similar.
   // The event name in that case is "click", not "keypress", and the type of the element
@@ -11,6 +12,8 @@ window.onload = () => {
 };
 
 let replInputBox: HTMLInputElement;
+let replHistory: HTMLDivElement;
+let isVerbose: boolean = false;
 
 function prepareTextInput() {
   const maybeInputs: HTMLCollectionOf<Element> =
@@ -42,11 +45,100 @@ function prepareButtonPress() {
   }
 }
 
-function handleButtonPress(event: MouseEvent) {
-  //TODO: change this to create/append a text element with this value
-  console.log(replInputBox.value);
-
-  //TODO: handle the command based on this text accordingly
+function prepareREPLHistory() {
+  const maybeDivs: HTMLCollectionOf<Element> =
+    document.getElementsByClassName("repl-history");
+  const maybeDiv: Element | null = maybeDivs.item(0);
+  if (maybeDiv == null) {
+    console.log("Couldn't find button element");
+  } else if (!(maybeDiv instanceof HTMLDivElement)) {
+    console.log(`Found element ${maybeDiv}, but it wasn't a button`);
+  } else {
+    replHistory = maybeDiv;
+  }
 }
 
-export {};
+function handleButtonPress(event: MouseEvent) {
+  //TODO: change this to create/append a text element with this value
+  const command: string = replInputBox.value;
+  interpretCommand(command);
+}
+
+function interpretCommand(command: string) {
+  if (command === "mode") {
+    isVerbose = !isVerbose;
+    addToREPLHistory("mode", "");
+  } else if (command.startsWith("loadfile")) {
+    addToREPLHistory("loadfile", "file loaded");
+    //load file command
+    //this will call externally to a parser
+  } else if (command === "view") {
+    console.log("viewed csv");
+    //create element in viewer
+    //displays from parsed json/array
+  } else if (command.startsWith("search")) {
+    console.log("searching for x and y ...");
+    //display a table of just the corresponding columns (from json/array)
+  } else {
+    //help case, print list of possible commands
+    console.log("help:");
+  }
+}
+
+function addToREPLHistory(command: string, output: string) {
+  if (command == null || command == "") {
+    console.log("addToREPLHistory failed: command is empty");
+    return;
+  }
+
+  let hasOutput: boolean;
+
+  if (output == null || output == "") {
+    hasOutput = false;
+  } else {
+    hasOutput = true;
+  }
+
+  if (!hasOutput && !isVerbose) return;
+
+  const newElement = document.createElement("p");
+
+  let commandText: string;
+  let outputText: string;
+  let commandTextNode;
+  let outputTextNode;
+
+  if (isVerbose) {
+    commandText = `Command: ${command}`;
+    commandTextNode = document.createTextNode(commandText);
+    newElement.appendChild(commandTextNode);
+    if (hasOutput) {
+      newElement.appendChild(document.createElement("br"));
+      outputText = `Output: ${output}`;
+      outputTextNode = document.createTextNode(outputText);
+      newElement.appendChild(outputTextNode);
+    }
+  } else {
+    outputText = output;
+    outputTextNode = document.createTextNode(outputText);
+    newElement.appendChild(outputTextNode);
+  }
+
+  replHistory.appendChild(newElement);
+}
+
+export {
+  prepareButtonPress,
+  prepareREPLHistory,
+  prepareTextInput,
+  handleButtonPress,
+};
+
+/**
+ * Commands:
+ * mode m
+ * load_file
+ * view
+ * search
+ * (help) - function is automatically thrown if there is an unknown command
+ */
