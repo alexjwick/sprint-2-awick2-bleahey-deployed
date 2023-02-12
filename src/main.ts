@@ -1,5 +1,3 @@
-//TODO: replace console.log with creating new element in our history box
-
 // The window.onload callback is invoked when the window is first loaded by the browser
 window.onload = () => {
   prepareTextInput();
@@ -59,7 +57,6 @@ function prepareREPLHistory() {
 }
 
 function handleButtonPress(event: MouseEvent) {
-  //TODO: change this to create/append a text element with this value
   const command: string = replInputBox.value;
   interpretCommand(command);
 }
@@ -69,9 +66,10 @@ function interpretCommand(command: string) {
     isVerbose = !isVerbose;
     addToREPLHistory("mode", "");
   } else if (command.startsWith("loadfile")) {
-    addToREPLHistory("loadfile", "file loaded");
     //load file command
-    //this will call externally to a parser
+    //this will call externally to a parser -- for now, just have some fn
+    //return True or False to determine whether we want to do this
+    addToREPLHistory("loadfile", "file loaded");
   } else if (command === "view") {
     console.log("viewed csv");
     //create element in viewer
