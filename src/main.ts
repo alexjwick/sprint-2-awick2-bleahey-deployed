@@ -1,8 +1,12 @@
+import { parse } from "./mock-backend/CSVParser.js";
+import { search } from "./mock-backend/CSVSearcher.js";
+
 // The window.onload callback is invoked when the window is first loaded by the browser
 window.onload = () => {
   prepareTextInput();
   prepareButtonPress();
   prepareREPLHistory();
+  prepareViewerDiv();
 
   // If you're adding an event for a button click, do something similar.
   // The event name in that case is "click", not "keypress", and the type of the element
@@ -11,7 +15,9 @@ window.onload = () => {
 
 let replInputBox: HTMLInputElement;
 let replHistory: HTMLDivElement;
+let viewerDiv: HTMLDivElement;
 let isVerbose: boolean = false;
+let currentData: string[][] | null;
 
 function prepareTextInput() {
   const maybeInputs: HTMLCollectionOf<Element> =
@@ -48,11 +54,24 @@ function prepareREPLHistory() {
     document.getElementsByClassName("repl-history");
   const maybeDiv: Element | null = maybeDivs.item(0);
   if (maybeDiv == null) {
-    console.log("Couldn't find button element");
+    console.log("Couldn't find div element");
   } else if (!(maybeDiv instanceof HTMLDivElement)) {
-    console.log(`Found element ${maybeDiv}, but it wasn't a button`);
+    console.log(`Found element ${maybeDiv}, but it wasn't a div`);
   } else {
     replHistory = maybeDiv;
+  }
+}
+
+function prepareViewerDiv() {
+  const maybeDivs: HTMLCollectionOf<Element> =
+    document.getElementsByClassName("viewer");
+  const maybeDiv: Element | null = maybeDivs.item(0);
+  if (maybeDiv == null) {
+    console.log("Couldn't find div element");
+  } else if (!(maybeDiv instanceof HTMLDivElement)) {
+    console.log(`Found element ${maybeDiv}, but it wasn't a div`);
+  } else {
+    viewerDiv = maybeDiv;
   }
 }
 
@@ -65,17 +84,53 @@ function interpretCommand(command: string) {
   if (command === "mode") {
     isVerbose = !isVerbose;
     addToREPLHistory("mode", "");
-  } else if (command.startsWith("loadfile")) {
+  } else if (command.startsWith("load_file")) {
     //load file command
-    //this will call externally to a parser -- for now, just have some fn
+    const filepath = command.substring(command.indexOf(" ") + 1);
+    //this will call externally to a parser -- for now, just have parse fn
+    currentData = parse(filepath);
+    if (currentData == null) {
+      console.log("Error loading file");
+      addToREPLHistory(command, "Error loading file");
+    } else {
+      addToREPLHistory(command, "Loaded file: " + filepath);
+    }
     //return True or False to determine whether we want to do this
-    addToREPLHistory("loadfile", "file loaded");
   } else if (command === "view") {
     console.log("viewed csv");
+    if (currentData == null) {
+      console.log("Error loading table: table is null");
+      addToREPLHistory(command, "Error loading table: table is null");
+    } else {
+      removeAllChildren(viewerDiv);
+      createTable(currentData);
+      addToREPLHistory(command, "Displayed current table");
+    }
     //create element in viewer
     //displays from parsed json/array
   } else if (command.startsWith("search")) {
-    console.log("searching for x and y ...");
+    const fields = command.substring(command.indexOf(" ") + 1).split(" ");
+    console.log(fields);
+    if (fields.length != 2) {
+      console.log("Error searching: invalid number of arguments");
+      addToREPLHistory(command, "Error searching: invalid number of arguments");
+    }
+    if (currentData == null) {
+      console.log("Error searching: no data has been loaded");
+      addToREPLHistory(command, "Error searching: no data has been loaded");
+    } else {
+      //handle the case of no matching rows
+      const matchingRows = search(currentData, fields[0], fields[1]);
+      if (matchingRows.length == 0) {
+        console.log("No results found");
+        addToREPLHistory(command, "No results found");
+      } else {
+        removeAllChildren(viewerDiv);
+        createTable(matchingRows);
+      }
+    }
+    //remember to run this in a successful case of searching
+    //removeAllChildren(viewerDiv);
     //display a table of just the corresponding columns (from json/array)
   } else {
     //help case, print list of possible commands
@@ -125,11 +180,41 @@ function addToREPLHistory(command: string, output: string) {
   replHistory.appendChild(newElement);
 }
 
+function createTable(data: string[][]) {
+  const table = document.createElement("table");
+  const tableBody = document.createElement("tbody");
+
+  if (currentData == null) {
+    console.log("Current table is null");
+  } else {
+    for (let row = 0; row < data.length; row++) {
+      const tableRow = document.createElement("tr");
+      for (let col = 0; col < data[row].length; col++) {
+        const cell = document.createElement("td");
+        const cellContent = document.createTextNode(data[row][col]);
+        cell.appendChild(cellContent);
+        tableRow.appendChild(cell);
+      }
+      tableBody.appendChild(tableRow);
+    }
+    table.appendChild(tableBody);
+    viewerDiv.appendChild(table);
+  }
+}
+
+function removeAllChildren(parent: HTMLElement) {
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+  }
+}
+
 export {
   prepareButtonPress,
   prepareREPLHistory,
   prepareTextInput,
+  prepareViewerDiv,
   handleButtonPress,
+  interpretCommand,
 };
 
 /**
