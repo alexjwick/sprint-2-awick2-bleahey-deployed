@@ -1,0 +1,22 @@
+{
+  "name": "sprint-2-awick2-bleahey",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cs0320-s2023/sprint-2-awick2-bleahey.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cs0320-s2023/sprint-2-awick2-bleahey/issues"
+  },
+  "homepage": "https://github.com/cs0320-s2023/sprint-2-awick2-bleahey#readme",
+  "dependencies": {
+    "typescript": "^4.9.5"
+  }
+}

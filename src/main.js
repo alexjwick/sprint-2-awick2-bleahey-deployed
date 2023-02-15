@@ -15,6 +15,7 @@ var replHistory;
 var viewerDiv;
 var isVerbose = false;
 var currentData;
+var helpMessage = "<p>Program: CSVParser\n\nDescription:\nProvides functionality for a user that desires to explore a CSV file\ncorresponding to a filepath in the current project. Further command description\ncan be found below.<br>\n<br>\nCommands: <br>\n* mode - toggles viewer mode between verbose or brief (default is brief)<br>\n* load_file <filepath> - loads a file from the given filepath<br>\n* view - views the currently loaded file<br>\n* search <column> <value> - searches the currently loaded file for rows with<br>\n  the the given value in the given column<br>\n* help - displays this help message<p>";
 function prepareTextInput() {
     var maybeInputs = document.getElementsByClassName("repl-command-box");
     var maybeInput = maybeInputs.item(0);
@@ -134,9 +135,12 @@ function interpretCommand(command) {
         //removeAllChildren(viewerDiv);
         //display a table of just the corresponding columns (from json/array)
     }
+    else if (command.startsWith("help")) {
+        addToREPLHistory(command, helpMessage);
+    }
     else {
-        //help case, print list of possible commands
-        console.log("help:");
+        addToREPLHistory(command, "Error: unrecognized command.<br>\n      <br>\n      See help message below:<br>\n      " + helpMessage);
+        console.log("Unrecognized command, help message displayed");
     }
 }
 function addToREPLHistory(command, output) {
@@ -203,11 +207,3 @@ function removeAllChildren(parent) {
     }
 }
 export { prepareButtonPress, prepareREPLHistory, prepareTextInput, prepareViewerDiv, handleButtonPress, interpretCommand, };
-/**
- * Commands:
- * mode m
- * load_file
- * view
- * search
- * (help) - function is automatically thrown if there is an unknown command
- */
