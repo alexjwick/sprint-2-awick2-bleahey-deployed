@@ -179,6 +179,8 @@ function addToREPLHistory(command: string, output: string) {
 
   const newElement = document.createElement("p");
 
+  //should rework this to accomodate changing innerhtml
+
   let commandText: string;
   let outputText: string;
   let commandTextNode;

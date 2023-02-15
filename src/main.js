@@ -158,6 +158,7 @@ function addToREPLHistory(command, output) {
     if (!hasOutput && !isVerbose)
         return;
     var newElement = document.createElement("p");
+    //should rework this to accomodate changing innerhtml
     var commandText;
     var outputText;
     var commandTextNode;
