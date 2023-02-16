@@ -157,29 +157,25 @@ function addToREPLHistory(command, output) {
     }
     if (!hasOutput && !isVerbose)
         return;
-    var newElement = document.createElement("p");
-    //should rework this to accomodate changing innerhtml
+    var elementToAdd = document.createElement("p");
     var commandText;
     var outputText;
-    var commandTextNode;
-    var outputTextNode;
+    var innerHTMLToAdd = "";
     if (isVerbose) {
         commandText = "Command: ".concat(command);
-        commandTextNode = document.createTextNode(commandText);
-        newElement.appendChild(commandTextNode);
+        innerHTMLToAdd += commandText;
         if (hasOutput) {
-            newElement.appendChild(document.createElement("br"));
+            innerHTMLToAdd += "<br>";
             outputText = "Output: ".concat(output);
-            outputTextNode = document.createTextNode(outputText);
-            newElement.appendChild(outputTextNode);
+            innerHTMLToAdd += outputText;
         }
     }
     else {
         outputText = output;
-        outputTextNode = document.createTextNode(outputText);
-        newElement.appendChild(outputTextNode);
+        innerHTMLToAdd += outputText;
     }
-    replHistory.appendChild(newElement);
+    elementToAdd.innerHTML = innerHTMLToAdd;
+    replHistory.appendChild(elementToAdd);
 }
 function createTable(data) {
     var table = document.createElement("table");

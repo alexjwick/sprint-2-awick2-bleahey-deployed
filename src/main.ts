@@ -177,32 +177,26 @@ function addToREPLHistory(command: string, output: string) {
 
   if (!hasOutput && !isVerbose) return;
 
-  const newElement = document.createElement("p");
-
-  //should rework this to accomodate changing innerhtml
+  const elementToAdd = document.createElement("p");
 
   let commandText: string;
   let outputText: string;
-  let commandTextNode;
-  let outputTextNode;
+  let innerHTMLToAdd: string = "";
 
   if (isVerbose) {
     commandText = `Command: ${command}`;
-    commandTextNode = document.createTextNode(commandText);
-    newElement.appendChild(commandTextNode);
+    innerHTMLToAdd += commandText;
     if (hasOutput) {
-      newElement.appendChild(document.createElement("br"));
+      innerHTMLToAdd += "<br>";
       outputText = `Output: ${output}`;
-      outputTextNode = document.createTextNode(outputText);
-      newElement.appendChild(outputTextNode);
+      innerHTMLToAdd += outputText;
     }
   } else {
     outputText = output;
-    outputTextNode = document.createTextNode(outputText);
-    newElement.appendChild(outputTextNode);
+    innerHTMLToAdd += outputText;
   }
-
-  replHistory.appendChild(newElement);
+  elementToAdd.innerHTML = innerHTMLToAdd;
+  replHistory.appendChild(elementToAdd);
 }
 
 function createTable(data: string[][]) {
