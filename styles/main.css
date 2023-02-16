@@ -1,13 +1,12 @@
+body {
+  font-family: "Courier New", Courier, monospace;
+}
+
 .program {
   display: flex;
   height: 80vh;
   border: 1px solid grey;
 }
-
-.title {
-  font-family: "Courier New", Courier, monospace;
-}
-
 .repl {
   width: 50%;
   border: 1px solid grey;
@@ -15,9 +14,13 @@
 
 .repl-history {
   height: 90%;
-  display: block;
   overflow: scroll;
-  font-family: "Courier New", Courier, monospace;
+  padding: 0 0.5rem;
+}
+
+.repl-history p {
+  margin-bottom: 0;
+  margin-top: 1rem;
 }
 
 .repl-input {
@@ -27,7 +30,6 @@
 .repl-command-box {
   width: 90%;
   display: block;
-  font-family: "Courier New", Courier, monospace;
 }
 
 .viewer {

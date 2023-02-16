@@ -19,20 +19,26 @@ let viewerDiv: HTMLDivElement;
 let isVerbose: boolean = false;
 let currentData: string[][] | null;
 
-const helpMessage = `<p>Program: CSVParser<br>
-
+const helpMessage = `Program: CSVParser
+<br>
+<br>
 Description:
 Provides functionality for a user that desires to explore a CSV file
 corresponding to a filepath in the current project. Further command description
-can be found below.<br>
+can be found below.
 <br>
-Commands: <br>
-* mode - toggles viewer mode between verbose or brief (default is brief)<br>
-* load_file <filepath> - loads a file from the given filepath<br>
-* view - views the currently loaded file<br>
-* search <column> <value> - searches the currently loaded file for rows with<br>
-  the the given value in the given column<br>
-* help - displays this help message<p>`;
+<br>
+Commands:
+<br>
+* mode - toggles viewer mode between verbose or brief (default is brief)
+<br>
+* load_file &lt;filepath&gt; - loads a file from the given filepath
+<br>
+* view - views the currently loaded file
+<br>
+* search &lt;column&gt; &lt;value&gt; - searches the currently loaded file for rows with the the given value in the given column
+<br>
+* help - displays this help message`;
 
 function prepareTextInput() {
   const maybeInputs: HTMLCollectionOf<Element> =
