@@ -13,6 +13,7 @@
   height: 90%;
   display: block;
   overflow: scroll;
+  font-family: "Courier New", Courier, monospace;
 }
 
 .repl-input {
@@ -22,6 +23,7 @@
 .repl-command-box {
   width: 90%;
   display: block;
+  font-family: "Courier New", Courier, monospace;
 }
 
 .viewer {
