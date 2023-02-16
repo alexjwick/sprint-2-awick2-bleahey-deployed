@@ -15,7 +15,7 @@ var replHistory;
 var viewerDiv;
 var isVerbose = false;
 var currentData;
-var helpMessage = "<p>Program: CSVParser\n\nDescription:\nProvides functionality for a user that desires to explore a CSV file\ncorresponding to a filepath in the current project. Further command description\ncan be found below.<br>\n<br>\nCommands: <br>\n* mode - toggles viewer mode between verbose or brief (default is brief)<br>\n* load_file <filepath> - loads a file from the given filepath<br>\n* view - views the currently loaded file<br>\n* search <column> <value> - searches the currently loaded file for rows with<br>\n  the the given value in the given column<br>\n* help - displays this help message<p>";
+var helpMessage = "<p>Program: CSVParser<br>\n\nDescription:\nProvides functionality for a user that desires to explore a CSV file\ncorresponding to a filepath in the current project. Further command description\ncan be found below.<br>\n<br>\nCommands: <br>\n* mode - toggles viewer mode between verbose or brief (default is brief)<br>\n* load_file <filepath> - loads a file from the given filepath<br>\n* view - views the currently loaded file<br>\n* search <column> <value> - searches the currently loaded file for rows with<br>\n  the the given value in the given column<br>\n* help - displays this help message<p>";
 function prepareTextInput() {
     var maybeInputs = document.getElementsByClassName("repl-command-box");
     var maybeInput = maybeInputs.item(0);

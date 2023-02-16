@@ -19,7 +19,7 @@ let viewerDiv: HTMLDivElement;
 let isVerbose: boolean = false;
 let currentData: string[][] | null;
 
-const helpMessage = `<p>Program: CSVParser
+const helpMessage = `<p>Program: CSVParser<br>
 
 Description:
 Provides functionality for a user that desires to explore a CSV file
