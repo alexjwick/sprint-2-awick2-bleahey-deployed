@@ -73,6 +73,7 @@ function prepareViewerDiv() {
 }
 function handleButtonPress(event) {
     var command = replInputBox.value;
+    replInputBox.value = "";
     interpretCommand(command);
 }
 function interpretCommand(command) {

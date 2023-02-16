@@ -13,7 +13,7 @@ body {
 }
 
 .repl-history {
-  height: 90%;
+  height: 95%;
   overflow: scroll;
   padding: 0 0.5rem;
 }
@@ -25,18 +25,42 @@ body {
 
 .repl-input {
   display: flex;
+  height: 5%;
+  border-top: 1px solid black;
+}
+
+input[type="text"] {
+  font-family: "Courier New", Courier, monospace;
+}
+
+.submit-button {
+  background-color: black;
+  font-family: "Courier New", Courier, monospace;
+  color: white;
+  font-weight: bold;
+  width: 5rem;
 }
 
 .repl-command-box {
-  width: 90%;
   display: block;
+  border: none;
+  width: calc(100% - 5rem);
 }
 
 .viewer {
   width: 50%;
   border: 1px solid grey;
+  padding: 1rem;
+  overflow: scroll;
+}
+
+.viewer table {
+  width: 100%;
+  border: 1px solid black;
+  border-collapse: collapse;
 }
 
 .viewer td {
   border: 1px solid black;
+  border-collapse: collapse;
 }

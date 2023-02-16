@@ -98,6 +98,7 @@ function prepareViewerDiv() {
 
 function handleButtonPress(event: MouseEvent) {
   const command: string = replInputBox.value;
+  replInputBox.value = "";
   interpretCommand(command);
 }
 
