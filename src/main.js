@@ -197,6 +197,10 @@ function createTable(data) {
         table.appendChild(tableBody);
         viewerDiv.appendChild(table);
     }
+    //TODO: get this to properly scroll down
+    //viewerDiv.scrollIntoView(false);
+    var scrollHeight = Math.max(viewerDiv.scrollHeight, viewerDiv.clientHeight);
+    viewerDiv.scrollTop = scrollHeight - viewerDiv.clientHeight;
 }
 function removeAllChildren(parent) {
     while (parent.firstChild) {

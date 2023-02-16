@@ -219,6 +219,9 @@ function createTable(data: string[][]) {
     table.appendChild(tableBody);
     viewerDiv.appendChild(table);
   }
+
+  //TODO: get this to properly scroll down
+  //viewerDiv.scrollIntoView(false);
 }
 
 function removeAllChildren(parent: HTMLElement) {
