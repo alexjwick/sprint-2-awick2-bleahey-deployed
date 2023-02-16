@@ -176,6 +176,8 @@ function addToREPLHistory(command, output) {
     }
     elementToAdd.innerHTML = innerHTMLToAdd;
     replHistory.appendChild(elementToAdd);
+    //TODO: get this to properly scroll down
+    replHistory.scrollTop = replHistory.scrollHeight;
 }
 function createTable(data) {
     var table = document.createElement("table");
@@ -197,10 +199,6 @@ function createTable(data) {
         table.appendChild(tableBody);
         viewerDiv.appendChild(table);
     }
-    //TODO: get this to properly scroll down
-    //viewerDiv.scrollIntoView(false);
-    var scrollHeight = Math.max(viewerDiv.scrollHeight, viewerDiv.clientHeight);
-    viewerDiv.scrollTop = scrollHeight - viewerDiv.clientHeight;
 }
 function removeAllChildren(parent) {
     while (parent.firstChild) {
