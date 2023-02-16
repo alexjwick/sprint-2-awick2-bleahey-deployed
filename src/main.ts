@@ -121,6 +121,13 @@ function handleButtonPress(event: MouseEvent) {
   interpretCommand(command);
 }
 
+function getMode() {
+  if (isVerbose) {
+    return "verbose";
+  }
+  return "brief";
+}
+
 /**
  * Interprets the user's text input from a variety of commmands.
  *
@@ -133,7 +140,7 @@ function handleButtonPress(event: MouseEvent) {
 function interpretCommand(command: string) {
   if (command === "mode") {
     isVerbose = !isVerbose;
-    addToREPLHistory("mode", "");
+    addToREPLHistory("mode", "Mode changed to " + getMode());
   } else if (command.startsWith("load_file")) {
     const filepath = command.substring(command.indexOf(" ") + 1);
     addToREPLHistory(command, runLoadFile(filepath));

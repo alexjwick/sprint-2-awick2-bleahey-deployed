@@ -95,6 +95,12 @@ function handleButtonPress(event) {
     replInputBox.value = "";
     interpretCommand(command);
 }
+function getMode() {
+    if (isVerbose) {
+        return "verbose";
+    }
+    return "brief";
+}
 /**
  * Interprets the user's text input from a variety of commmands.
  *
@@ -107,7 +113,7 @@ function handleButtonPress(event) {
 function interpretCommand(command) {
     if (command === "mode") {
         isVerbose = !isVerbose;
-        addToREPLHistory("mode", "");
+        addToREPLHistory("mode", "Mode changed to " + getMode());
     }
     else if (command.startsWith("load_file")) {
         var filepath = command.substring(command.indexOf(" ") + 1);
@@ -172,8 +178,12 @@ function runView() {
     return output;
 }
 /**
+ * Searches the loaded CSV for a value inputted from the user. Displays the
+ * matching rows.
  *
- * @return the output to be
+ * @param column - the column the value is contained in
+ * @param value - the value that the user is searching for
+ * @return the output to be displayed in the REPL history
  */
 function runSearch(column, value) {
     var output;
@@ -194,6 +204,12 @@ function runSearch(column, value) {
     console.log(output);
     return output;
 }
+/**
+ *
+ * @param command
+ * @param output
+ * @returns
+ */
 function addToREPLHistory(command, output) {
     if (command == null || command == "") {
         console.log("addToREPLHistory failed: command is empty");
@@ -227,7 +243,6 @@ function addToREPLHistory(command, output) {
     }
     elementToAdd.innerHTML = innerHTMLToAdd;
     replHistory.appendChild(elementToAdd);
-    //TODO: get this to properly scroll down
     replHistory.scrollTop = replHistory.scrollHeight;
 }
 function createTable(data) {
