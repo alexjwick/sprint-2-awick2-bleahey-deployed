@@ -7,7 +7,9 @@ body {
   height: 80vh;
   border: 1px solid grey;
 }
+
 .repl {
+  box-sizing: border-box;
   width: 50%;
   border: 1px solid grey;
 }
@@ -48,6 +50,7 @@ input[type="text"] {
 }
 
 .viewer {
+  box-sizing: border-box;
   width: 50%;
   border: 1px solid grey;
   padding: 1rem;

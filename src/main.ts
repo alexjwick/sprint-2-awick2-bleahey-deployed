@@ -40,6 +40,9 @@ Commands:
 <br>
 * help - displays this help message`;
 
+/**
+ * Prepares the components of the command box for receiving text input.
+ */
 function prepareTextInput() {
   const maybeInputs: HTMLCollectionOf<Element> =
     document.getElementsByClassName("repl-command-box");
@@ -57,6 +60,9 @@ function prepareTextInput() {
   }
 }
 
+/**
+ * Prepares the submit button for handling clicks from the user.
+ */
 function prepareButtonPress() {
   const maybeButtons: HTMLCollectionOf<Element> =
     document.getElementsByClassName("submit-button");
@@ -70,6 +76,10 @@ function prepareButtonPress() {
   }
 }
 
+/**
+ * Prepares the history div for displaying the previous commands and output
+ * from the user.
+ */
 function prepareREPLHistory() {
   const maybeDivs: HTMLCollectionOf<Element> =
     document.getElementsByClassName("repl-history");
@@ -83,6 +93,9 @@ function prepareREPLHistory() {
   }
 }
 
+/**
+ * Prepare the Viewer div for displaying view or search outputs.
+ */
 function prepareViewerDiv() {
   const maybeDivs: HTMLCollectionOf<Element> =
     document.getElementsByClassName("viewer");
@@ -96,64 +109,44 @@ function prepareViewerDiv() {
   }
 }
 
+/**
+ * Accepts a MouseEvent when the button is clicked and passes the current
+ * value typed into the input box to the command interpeter function.
+ *
+ * @param MouseEvent - an event such as a button click
+ */
 function handleButtonPress(event: MouseEvent) {
   const command: string = replInputBox.value;
   replInputBox.value = "";
   interpretCommand(command);
 }
 
+/**
+ * Interprets the user's text input from a variety of commmands.
+ *
+ * Inputs include "view", "mode", "read_file <file>", "search <column> <value>",
+ * and "help" (which displays further details on the program and function of
+ * each command).
+ *
+ * @param command - the type of command to be performed
+ */
 function interpretCommand(command: string) {
   if (command === "mode") {
     isVerbose = !isVerbose;
     addToREPLHistory("mode", "");
   } else if (command.startsWith("load_file")) {
-    //load file command
     const filepath = command.substring(command.indexOf(" ") + 1);
-    //this will call externally to a parser -- for now, just have parse fn
-    currentData = parse(filepath);
-    if (currentData == null) {
-      console.log("Error loading file");
-      addToREPLHistory(command, "Error loading file");
-    } else {
-      addToREPLHistory(command, "Loaded file: " + filepath);
-    }
-    //return True or False to determine whether we want to do this
+    addToREPLHistory(command, runLoadFile(filepath));
   } else if (command === "view") {
-    console.log("viewed csv");
-    if (currentData == null) {
-      console.log("Error loading table: table is null");
-      addToREPLHistory(command, "Error loading table: table is null");
-    } else {
-      removeAllChildren(viewerDiv);
-      createTable(currentData);
-      addToREPLHistory(command, "Displayed current table");
-    }
-    //create element in viewer
-    //displays from parsed json/array
+    addToREPLHistory(command, runView());
   } else if (command.startsWith("search")) {
     const fields = command.substring(command.indexOf(" ") + 1).split(" ");
-    console.log(fields);
     if (fields.length != 2) {
       console.log("Error searching: invalid number of arguments");
       addToREPLHistory(command, "Error searching: invalid number of arguments");
-    }
-    if (currentData == null) {
-      console.log("Error searching: no data has been loaded");
-      addToREPLHistory(command, "Error searching: no data has been loaded");
     } else {
-      //handle the case of no matching rows
-      const matchingRows = search(currentData, fields[0], fields[1]);
-      if (matchingRows.length == 0) {
-        console.log("No results found");
-        addToREPLHistory(command, "No results found");
-      } else {
-        removeAllChildren(viewerDiv);
-        createTable(matchingRows);
-      }
+      addToREPLHistory(command, runSearch(fields[0], fields[1]));
     }
-    //remember to run this in a successful case of searching
-    //removeAllChildren(viewerDiv);
-    //display a table of just the corresponding columns (from json/array)
   } else if (command.startsWith("help")) {
     addToREPLHistory(command, helpMessage);
   } else {
@@ -168,6 +161,75 @@ function interpretCommand(command: string) {
   }
 }
 
+/**
+ * Calls an external function to parse the filepath into a 2d array of strings,
+ * stored locally for use searching.
+ *
+ * @param filepath - the path corresponding to the file to loaded
+ * @return the output to be displayed in the REPL History
+ */
+function runLoadFile(filepath: string): string {
+  let output: string;
+  currentData = parse(filepath);
+  if (currentData == null) {
+    output = "Error loading file";
+  } else {
+    output = "Loaded file: " + filepath;
+  }
+  console.log(output);
+  return output;
+}
+
+/**
+ * Displays the current CSV file that is loaded locally.
+ *
+ * @return the output to be displayed in the REPL history
+ */
+function runView(): string {
+  let output: string;
+  if (currentData == null) {
+    output = "Error loading table: table is null";
+  } else {
+    output = "Displayed current table";
+    removeAllChildren(viewerDiv);
+    createTable(currentData);
+  }
+  console.log(output);
+  return output;
+}
+
+/**
+ * Searches the loaded CSV for a value inputted from the user. Displays the
+ * matching rows.
+ *
+ * @param column - the column the value is contained in
+ * @param value - the value that the user is searching for
+ * @return the output to be displayed in the REPL history
+ */
+function runSearch(column: string, value: string): string {
+  let output: string;
+  if (currentData == null) {
+    output = "Error searching: no data has been loaded";
+  } else {
+    const matchingRows = search(currentData, column, value);
+    if (matchingRows.length == 0) {
+      output = "No results found";
+    } else {
+      output = "Displayed results";
+      removeAllChildren(viewerDiv);
+      createTable(matchingRows);
+    }
+  }
+  console.log(output);
+  return output;
+}
+
+/**
+ *
+ * @param command
+ * @param output
+ * @returns
+ */
 function addToREPLHistory(command: string, output: string) {
   if (command == null || command == "") {
     console.log("addToREPLHistory failed: command is empty");
@@ -205,7 +267,6 @@ function addToREPLHistory(command: string, output: string) {
   elementToAdd.innerHTML = innerHTMLToAdd;
   replHistory.appendChild(elementToAdd);
 
-  //TODO: get this to properly scroll down
   replHistory.scrollTop = replHistory.scrollHeight;
 }
 
