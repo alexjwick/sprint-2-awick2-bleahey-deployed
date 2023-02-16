@@ -4,6 +4,10 @@
   border: 1px solid grey;
 }
 
+.title {
+  font-family: "Courier New", Courier, monospace;
+}
+
 .repl {
   width: 50%;
   border: 1px solid grey;
