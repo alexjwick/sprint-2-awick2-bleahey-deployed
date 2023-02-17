@@ -14,6 +14,6 @@ test("handleKeypress counting", () => {
   expect(main.getPressCount()).toBe(2);
 });
 */
-test("change mode", function () {
+test("get mode", function () {
     expect(main.getMode()).toBe("brief");
 });

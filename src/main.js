@@ -2,10 +2,7 @@ import { parse } from "./mock-backend/CSVParser.js";
 import { search } from "./mock-backend/CSVSearcher.js";
 // The window.onload callback is invoked when the window is first loaded by the browser
 window.onload = function () {
-    prepareTextInput();
-    prepareButtonPress();
-    prepareREPLHistory();
-    prepareViewerDiv();
+    reset();
 };
 /** The box that the user types text input into. */
 var replInputBox;
@@ -294,11 +291,15 @@ function removeAllChildren(parent) {
 /**
  * Resets current data and mode
  */
-function clearHistory() {
+function reset() {
     currentData = null;
     isVerbose = false;
+    prepareTextInput();
+    prepareButtonPress();
+    prepareREPLHistory();
+    prepareViewerDiv();
 }
 /**
  * Export the functions required by the window to run the program.
  */
-export { prepareButtonPress, prepareREPLHistory, prepareTextInput, prepareViewerDiv, handleButtonPress, interpretCommand, getMode, clearHistory, };
+export { prepareButtonPress, prepareREPLHistory, prepareTextInput, prepareViewerDiv, handleButtonPress, interpretCommand, getMode, reset, };

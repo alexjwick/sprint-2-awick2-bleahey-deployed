@@ -3,10 +3,7 @@ import { search } from "./mock-backend/CSVSearcher.js";
 
 // The window.onload callback is invoked when the window is first loaded by the browser
 window.onload = () => {
-  prepareTextInput();
-  prepareButtonPress();
-  prepareREPLHistory();
-  prepareViewerDiv();
+  reset();
 };
 
 /** The box that the user types text input into. */
@@ -327,9 +324,13 @@ function removeAllChildren(parent: HTMLElement): void {
 /**
  * Resets current data and mode
  */
-function clearHistory(): void {
+function reset(): void {
   currentData = null;
   isVerbose = false;
+  prepareTextInput();
+  prepareButtonPress();
+  prepareREPLHistory();
+  prepareViewerDiv();
 }
 
 /**
@@ -343,5 +344,5 @@ export {
   handleButtonPress,
   interpretCommand,
   getMode,
-  clearHistory,
+  reset,
 };

@@ -22,7 +22,7 @@ const START_HTML: string = `<div class="program">
 <script type="module" src="../src/main.js"></script>`;
 
 beforeEach(() => {
-  main.clearHistory();
+  main.reset();
   document.body.innerHTML = START_HTML;
   const maybeInputs: HTMLCollectionOf<Element> =
     document.getElementsByClassName("repl-command-box");
