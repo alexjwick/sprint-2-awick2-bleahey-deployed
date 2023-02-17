@@ -54,7 +54,10 @@ function search(parsedData, column, value) {
             case "instrument" || 2:
                 switch (value) {
                     case "lute":
-                        return [["Giustina", "Burkle", "lute"]];
+                        return [
+                            ["Giustina", "Burkle", "lute"],
+                            ["Abbie", "Capello", "lute"],
+                        ];
                     case "drums":
                         return [["Corry", "Marisa", "drums"]];
                     case "keyboard":
@@ -62,7 +65,10 @@ function search(parsedData, column, value) {
                     case "recorder":
                         return [["Merrie", "Gunn", "recorder"]];
                     case "lute":
-                        return [["Abbie", "Capello", "lute"]];
+                        return [
+                            ["Giustina", "Burkle", "lute"],
+                            ["Abbie", "Capello", "lute"],
+                        ];
                     default:
                         return [];
                 }
