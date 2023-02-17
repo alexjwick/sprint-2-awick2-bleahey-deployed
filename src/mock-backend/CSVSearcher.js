@@ -3,11 +3,11 @@
  */
 var band = [
     ["firstname", "lastname", "instrument"],
-    ["Giustina", "Burkle", "electric guitar"],
+    ["Giustina", "Burkle", "lute"],
     ["Corry", "Marisa", "drums"],
     ["Benita", "Sikorski", "keyboard"],
-    ["Merrie", "Gunn", "bass guitar"],
-    ["Abbie", "Capello", "electric guitar"],
+    ["Merrie", "Gunn", "recorder"],
+    ["Abbie", "Capello", "lute"],
 ];
 /**
  * Mocks searching parsed data (works only for parsed data from band.csv)
@@ -24,45 +24,45 @@ function search(parsedData, column, value) {
             case "firstname" || 0:
                 switch (value) {
                     case "Giustina":
-                        return [["Giustina", "Burkle", "electric guitar"]];
+                        return [["Giustina", "Burkle", "lute"]];
                     case "Corry":
                         return [["Corry", "Marisa", "drums"]];
                     case "Benita":
                         return [["Benita", "Sikorski", "keyboard"]];
                     case "Merrie":
-                        return [["Merrie", "Gunn", "bass guitar"]];
+                        return [["Merrie", "Gunn", "recorder"]];
                     case "Abbie":
-                        return [["Abbie", "Capello", "electric guitar"]];
+                        return [["Abbie", "Capello", "lute"]];
                     default:
                         return [];
                 }
             case "lastname" || 1:
                 switch (value) {
                     case "Burkle":
-                        return [["Giustina", "Burkle", "electric guitar"]];
+                        return [["Giustina", "Burkle", "lute"]];
                     case "Marisa":
                         return [["Corry", "Marisa", "drums"]];
                     case "Sikorski":
                         return [["Benita", "Sikorski", "keyboard"]];
                     case "Gunn":
-                        return [["Merrie", "Gunn", "bass guitar"]];
+                        return [["Merrie", "Gunn", "recorder"]];
                     case "Capello":
-                        return [["Abbie", "Capello", "electric guitar"]];
+                        return [["Abbie", "Capello", "lute"]];
                     default:
                         return [];
                 }
             case "instrument" || 2:
                 switch (value) {
-                    case "electric guitar":
-                        return [["Giustina", "Burkle", "electric guitar"]];
+                    case "lute":
+                        return [["Giustina", "Burkle", "lute"]];
                     case "drums":
                         return [["Corry", "Marisa", "drums"]];
                     case "keyboard":
                         return [["Benita", "Sikorski", "keyboard"]];
-                    case "bass guitar":
-                        return [["Merrie", "Gunn", "bass guitar"]];
-                    case "electric guitar":
-                        return [["Abbie", "Capello", "electric guitar"]];
+                    case "recorder":
+                        return [["Merrie", "Gunn", "recorder"]];
+                    case "lute":
+                        return [["Abbie", "Capello", "lute"]];
                     default:
                         return [];
                 }
