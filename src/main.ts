@@ -48,7 +48,7 @@ function prepareTextInput(): void {
     document.getElementsByClassName("repl-command-box");
   const maybeInput: Element | null = maybeInputs.item(0);
   if (maybeInput == null) {
-    console.log("Couldn't find input element");
+    console.log("Couldn't find repl-command-box element");
   } else if (!(maybeInput instanceof HTMLInputElement)) {
     console.log(`Found element ${maybeInput}, but it wasn't an input`);
   } else if (maybeInput.type != "text") {
@@ -68,7 +68,7 @@ function prepareButtonPress(): void {
     document.getElementsByClassName("submit-button");
   const maybeButton: Element | null = maybeButtons.item(0);
   if (maybeButton == null) {
-    console.log("Couldn't find button element");
+    console.log("Couldn't find submit-button element");
   } else if (!(maybeButton instanceof HTMLButtonElement)) {
     console.log(`Found element ${maybeButton}, but it wasn't a button`);
   } else {
@@ -85,7 +85,7 @@ function prepareREPLHistory(): void {
     document.getElementsByClassName("repl-history");
   const maybeDiv: Element | null = maybeDivs.item(0);
   if (maybeDiv == null) {
-    console.log("Couldn't find div element");
+    console.log("Couldn't find reply-history element");
   } else if (!(maybeDiv instanceof HTMLDivElement)) {
     console.log(`Found element ${maybeDiv}, but it wasn't a div`);
   } else {
@@ -101,7 +101,7 @@ function prepareViewerDiv(): void {
     document.getElementsByClassName("viewer");
   const maybeDiv: Element | null = maybeDivs.item(0);
   if (maybeDiv == null) {
-    console.log("Couldn't find div element");
+    console.log("Couldn't find viewer element");
   } else if (!(maybeDiv instanceof HTMLDivElement)) {
     console.log(`Found element ${maybeDiv}, but it wasn't a div`);
   } else {
@@ -199,11 +199,12 @@ function runLoadFile(filepath: string): string {
 function runView(): string {
   let output: string;
   if (currentData == null) {
-    output = "Error loading table: table is null";
+    output = "Error loading table: current data is null";
   } else {
     output = "Displayed current table";
     removeAllChildren(viewerDiv);
-    createTable(currentData);
+    const table = createTable(currentData);
+    viewerDiv.appendChild(table);
   }
   console.log(output);
   return output;
@@ -287,27 +288,24 @@ function addToREPLHistory(command: string, output: string): void {
  * Creates an html table from a 2d array of strings.$
  *
  * @param data - A 2d array of strings that the table should represent
+ * @return the table created
  */
-function createTable(data: string[][]): void {
+function createTable(data: string[][]): HTMLTableElement {
   const table: HTMLTableElement = document.createElement("table");
   const tableBody: HTMLTableSectionElement = document.createElement("tbody");
 
-  if (currentData == null) {
-    console.log("Current table is null");
-  } else {
-    for (let row = 0; row < data.length; row++) {
-      const tableRow: HTMLTableRowElement = document.createElement("tr");
-      for (let col = 0; col < data[row].length; col++) {
-        const cell: HTMLTableCellElement = document.createElement("td");
-        const cellContent: Text = document.createTextNode(data[row][col]);
-        cell.appendChild(cellContent);
-        tableRow.appendChild(cell);
-      }
-      tableBody.appendChild(tableRow);
+  for (let row = 0; row < data.length; row++) {
+    const tableRow: HTMLTableRowElement = document.createElement("tr");
+    for (let col = 0; col < data[row].length; col++) {
+      const cell: HTMLTableCellElement = document.createElement("td");
+      const cellContent: Text = document.createTextNode(data[row][col]);
+      cell.appendChild(cellContent);
+      tableRow.appendChild(cell);
     }
-    table.appendChild(tableBody);
-    viewerDiv.appendChild(table);
+    tableBody.appendChild(tableRow);
   }
+  table.appendChild(tableBody);
+  return table;
 }
 
 /**
@@ -319,6 +317,19 @@ function removeAllChildren(parent: HTMLElement): void {
   while (parent.firstChild) {
     parent.removeChild(parent.firstChild);
   }
+}
+
+function getCurrentData(): string[][] | null {
+  if (currentData == null) {
+    return null;
+  }
+  let currentDataCopy: string[][] = [];
+  for (let row = 0; row < currentData.length; row++) {
+    for (let col = 0; col < currentData[row].length; col++) {
+      currentDataCopy[row][col] = currentData[row][col];
+    }
+  }
+  return currentDataCopy;
 }
 
 /**
@@ -345,4 +356,8 @@ export {
   interpretCommand,
   getMode,
   reset,
+  HELP_MESSAGE,
+  runView,
+  runSearch,
+  getCurrentData,
 };

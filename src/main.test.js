@@ -17,3 +17,10 @@ test("handleKeypress counting", () => {
 test("get mode", function () {
     expect(main.getMode()).toBe("brief");
 });
+test("empty view", function () {
+    expect(main.runView()).toBe("Error loading table: table is null");
+});
+test("empty search", function () {
+    expect(main.runSearch("test", "test")).toBe("Error searching: no data has been loaded");
+});
+test("test create table", function () { });

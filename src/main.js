@@ -23,7 +23,7 @@ function prepareTextInput() {
     var maybeInputs = document.getElementsByClassName("repl-command-box");
     var maybeInput = maybeInputs.item(0);
     if (maybeInput == null) {
-        console.log("Couldn't find input element");
+        console.log("Couldn't find repl-command-box element");
     }
     else if (!(maybeInput instanceof HTMLInputElement)) {
         console.log("Found element ".concat(maybeInput, ", but it wasn't an input"));
@@ -42,7 +42,7 @@ function prepareButtonPress() {
     var maybeButtons = document.getElementsByClassName("submit-button");
     var maybeButton = maybeButtons.item(0);
     if (maybeButton == null) {
-        console.log("Couldn't find button element");
+        console.log("Couldn't find submit-button element");
     }
     else if (!(maybeButton instanceof HTMLButtonElement)) {
         console.log("Found element ".concat(maybeButton, ", but it wasn't a button"));
@@ -59,7 +59,7 @@ function prepareREPLHistory() {
     var maybeDivs = document.getElementsByClassName("repl-history");
     var maybeDiv = maybeDivs.item(0);
     if (maybeDiv == null) {
-        console.log("Couldn't find div element");
+        console.log("Couldn't find reply-history element");
     }
     else if (!(maybeDiv instanceof HTMLDivElement)) {
         console.log("Found element ".concat(maybeDiv, ", but it wasn't a div"));
@@ -75,7 +75,7 @@ function prepareViewerDiv() {
     var maybeDivs = document.getElementsByClassName("viewer");
     var maybeDiv = maybeDivs.item(0);
     if (maybeDiv == null) {
-        console.log("Couldn't find div element");
+        console.log("Couldn't find viewer element");
     }
     else if (!(maybeDiv instanceof HTMLDivElement)) {
         console.log("Found element ".concat(maybeDiv, ", but it wasn't a div"));
@@ -172,12 +172,13 @@ function runLoadFile(filepath) {
 function runView() {
     var output;
     if (currentData == null) {
-        output = "Error loading table: table is null";
+        output = "Error loading table: current data is null";
     }
     else {
         output = "Displayed current table";
         removeAllChildren(viewerDiv);
-        createTable(currentData);
+        var table = createTable(currentData);
+        viewerDiv.appendChild(table);
     }
     console.log(output);
     return output;
@@ -256,27 +257,23 @@ function addToREPLHistory(command, output) {
  * Creates an html table from a 2d array of strings.$
  *
  * @param data - A 2d array of strings that the table should represent
+ * @return the table created
  */
 function createTable(data) {
     var table = document.createElement("table");
     var tableBody = document.createElement("tbody");
-    if (currentData == null) {
-        console.log("Current table is null");
-    }
-    else {
-        for (var row = 0; row < data.length; row++) {
-            var tableRow = document.createElement("tr");
-            for (var col = 0; col < data[row].length; col++) {
-                var cell = document.createElement("td");
-                var cellContent = document.createTextNode(data[row][col]);
-                cell.appendChild(cellContent);
-                tableRow.appendChild(cell);
-            }
-            tableBody.appendChild(tableRow);
+    for (var row = 0; row < data.length; row++) {
+        var tableRow = document.createElement("tr");
+        for (var col = 0; col < data[row].length; col++) {
+            var cell = document.createElement("td");
+            var cellContent = document.createTextNode(data[row][col]);
+            cell.appendChild(cellContent);
+            tableRow.appendChild(cell);
         }
-        table.appendChild(tableBody);
-        viewerDiv.appendChild(table);
+        tableBody.appendChild(tableRow);
     }
+    table.appendChild(tableBody);
+    return table;
 }
 /**
  * Removes all child nodes from the given element.
@@ -287,6 +284,18 @@ function removeAllChildren(parent) {
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
     }
+}
+function getCurrentData() {
+    if (currentData == null) {
+        return null;
+    }
+    var currentDataCopy = [];
+    for (var row = 0; row < currentData.length; row++) {
+        for (var col = 0; col < currentData[row].length; col++) {
+            currentDataCopy[row][col] = currentData[row][col];
+        }
+    }
+    return currentDataCopy;
 }
 /**
  * Resets current data and mode
@@ -302,4 +311,4 @@ function reset() {
 /**
  * Export the functions required by the window to run the program.
  */
-export { prepareButtonPress, prepareREPLHistory, prepareTextInput, prepareViewerDiv, handleButtonPress, interpretCommand, getMode, reset, };
+export { prepareButtonPress, prepareREPLHistory, prepareTextInput, prepareViewerDiv, handleButtonPress, interpretCommand, getMode, reset, HELP_MESSAGE, runView, runSearch, getCurrentData, };
