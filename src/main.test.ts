@@ -1,7 +1,3 @@
-import "@testing-library/dom";
-import "@testing-library/jest-dom";
-
-// all exports from main will now be available as main.X
 import * as main from "./main";
 /*
 test("is 1 + 1 = 2?", () => {
@@ -18,4 +14,7 @@ test("handleKeypress counting", () => {
   expect(main.getPressCount()).toBe(2);
 });
 */
-test("change mode", () => {});
+
+test("get mode", () => {
+  expect(main.getMode()).toBe("brief");
+});

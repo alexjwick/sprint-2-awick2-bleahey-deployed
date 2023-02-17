@@ -7,15 +7,11 @@ window.onload = () => {
   prepareButtonPress();
   prepareREPLHistory();
   prepareViewerDiv();
-
-  // If you're adding an event for a button click, do something similar.
-  // The event name in that case is "click", not "keypress", and the type of the element
-  // should be HTMLButtonElement. The handler function for a "click" takes no arguments.
 };
 
 /** The box that the user types text input into. */
 let replInputBox: HTMLInputElement;
-/**A div element that displays the previous results of commands being run. */
+/** A div element that displays the previous results of commands being run. */
 let replHistory: HTMLDivElement;
 /** A div element that displays the table or rows currently being viewed */
 let viewerDiv: HTMLDivElement;
@@ -25,10 +21,11 @@ let isVerbose: boolean = false;
 let currentData: string[][] | null;
 
 /** The help message to be displayed with the proper command */
-const helpMessage = `Program: CSVParser
+const HELP_MESSAGE = `Program: CSVParser
 <br>
 <br>
 Description:
+<br>
 Provides functionality for a user that desires to explore a CSV file
 corresponding to a filepath in the current project. Further command description
 can be found below.
@@ -166,7 +163,7 @@ function interpretCommand(command: string): void {
       addToREPLHistory(command, runSearch(fields[0], fields[1]));
     }
   } else if (command.startsWith("help")) {
-    addToREPLHistory(command, helpMessage);
+    addToREPLHistory(command, HELP_MESSAGE);
   } else {
     addToREPLHistory(
       command,
@@ -328,6 +325,14 @@ function removeAllChildren(parent: HTMLElement): void {
 }
 
 /**
+ * Resets current data and mode
+ */
+function clearHistory(): void {
+  currentData = null;
+  isVerbose = false;
+}
+
+/**
  * Export the functions required by the window to run the program.
  */
 export {
@@ -337,4 +342,6 @@ export {
   prepareViewerDiv,
   handleButtonPress,
   interpretCommand,
+  getMode,
+  clearHistory,
 };

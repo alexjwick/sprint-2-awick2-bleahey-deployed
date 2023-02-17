@@ -6,13 +6,10 @@ window.onload = function () {
     prepareButtonPress();
     prepareREPLHistory();
     prepareViewerDiv();
-    // If you're adding an event for a button click, do something similar.
-    // The event name in that case is "click", not "keypress", and the type of the element
-    // should be HTMLButtonElement. The handler function for a "click" takes no arguments.
 };
 /** The box that the user types text input into. */
 var replInputBox;
-/**A div element that displays the previous results of commands being run. */
+/** A div element that displays the previous results of commands being run. */
 var replHistory;
 /** A div element that displays the table or rows currently being viewed */
 var viewerDiv;
@@ -21,7 +18,7 @@ var isVerbose = false;
 /** A 2d array of the currently loaded data from the CSV. */
 var currentData;
 /** The help message to be displayed with the proper command */
-var helpMessage = "Program: CSVParser\n<br>\n<br>\nDescription:\nProvides functionality for a user that desires to explore a CSV file\ncorresponding to a filepath in the current project. Further command description\ncan be found below.\n<br>\n<br>\nCommands:\n<br>\n* mode - toggles viewer mode between verbose or brief (default is brief)\n<br>\n* load_file &lt;filepath&gt; - loads a file from the given filepath\n<br>\n* view - views the currently loaded file\n<br>\n* search &lt;column&gt; &lt;value&gt; - searches the currently loaded file for rows with the the given value in the given column\n<br>\n* help - displays this help message";
+var HELP_MESSAGE = "Program: CSVParser\n<br>\n<br>\nDescription:\n<br>\nProvides functionality for a user that desires to explore a CSV file\ncorresponding to a filepath in the current project. Further command description\ncan be found below.\n<br>\n<br>\nCommands:\n<br>\n* mode - toggles viewer mode between verbose or brief (default is brief)\n<br>\n* load_file &lt;filepath&gt; - loads a file from the given filepath\n<br>\n* view - views the currently loaded file\n<br>\n* search &lt;column&gt; &lt;value&gt; - searches the currently loaded file for rows with the the given value in the given column\n<br>\n* help - displays this help message";
 /**
  * Prepares the components of the command box for receiving text input.
  */
@@ -144,7 +141,7 @@ function interpretCommand(command) {
         }
     }
     else if (command.startsWith("help")) {
-        addToREPLHistory(command, helpMessage);
+        addToREPLHistory(command, HELP_MESSAGE);
     }
     else {
         addToREPLHistory(command, "Unrecognized command: ".concat(command, "\n      <br>\n      Enter \"help\" for more information"));
@@ -295,6 +292,13 @@ function removeAllChildren(parent) {
     }
 }
 /**
+ * Resets current data and mode
+ */
+function clearHistory() {
+    currentData = null;
+    isVerbose = false;
+}
+/**
  * Export the functions required by the window to run the program.
  */
-export { prepareButtonPress, prepareREPLHistory, prepareTextInput, prepareViewerDiv, handleButtonPress, interpretCommand, };
+export { prepareButtonPress, prepareREPLHistory, prepareTextInput, prepareViewerDiv, handleButtonPress, interpretCommand, getMode, clearHistory, };
