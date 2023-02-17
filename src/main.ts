@@ -116,7 +116,9 @@ function prepareViewerDiv(): void {
 function handleButtonPress(): void {
   const command: string = replInputBox.value;
   replInputBox.value = "";
-  interpretCommand(command);
+  if (command != "") {
+    interpretCommand(command);
+  }
 }
 
 /**
@@ -185,7 +187,7 @@ function runLoadFile(filepath: string): string {
   if (currentData == null) {
     output = `Error loading file '${filepath}'`;
   } else {
-    output = `Loaded file: ${filepath}`;
+    output = `Loaded file: '${filepath}'`;
   }
   console.log(output);
   return output;
@@ -229,7 +231,8 @@ function runSearch(column: string, value: string): string {
     } else {
       output = "Displayed results";
       removeAllChildren(viewerDiv);
-      createTable(matchingRows);
+      const table = createTable(matchingRows);
+      viewerDiv.appendChild(table);
     }
   }
   console.log(output);
@@ -323,12 +326,7 @@ function getCurrentData(): string[][] | null {
   if (currentData == null) {
     return null;
   }
-  let currentDataCopy: string[][] = [];
-  for (let row = 0; row < currentData.length; row++) {
-    for (let col = 0; col < currentData[row].length; col++) {
-      currentDataCopy[row][col] = currentData[row][col];
-    }
-  }
+  let currentDataCopy: string[][] = currentData;
   return currentDataCopy;
 }
 
@@ -356,8 +354,9 @@ export {
   interpretCommand,
   getMode,
   reset,
-  HELP_MESSAGE,
   runView,
   runSearch,
   getCurrentData,
+  runLoadFile,
+  createTable,
 };

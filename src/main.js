@@ -91,7 +91,9 @@ function prepareViewerDiv() {
 function handleButtonPress() {
     var command = replInputBox.value;
     replInputBox.value = "";
-    interpretCommand(command);
+    if (command != "") {
+        interpretCommand(command);
+    }
 }
 /**
  * Returns the current mode as a string.
@@ -159,7 +161,7 @@ function runLoadFile(filepath) {
         output = "Error loading file '".concat(filepath, "'");
     }
     else {
-        output = "Loaded file: ".concat(filepath);
+        output = "Loaded file: '".concat(filepath, "'");
     }
     console.log(output);
     return output;
@@ -204,7 +206,8 @@ function runSearch(column, value) {
         else {
             output = "Displayed results";
             removeAllChildren(viewerDiv);
-            createTable(matchingRows);
+            var table = createTable(matchingRows);
+            viewerDiv.appendChild(table);
         }
     }
     console.log(output);
@@ -289,12 +292,7 @@ function getCurrentData() {
     if (currentData == null) {
         return null;
     }
-    var currentDataCopy = [];
-    for (var row = 0; row < currentData.length; row++) {
-        for (var col = 0; col < currentData[row].length; col++) {
-            currentDataCopy[row][col] = currentData[row][col];
-        }
-    }
+    var currentDataCopy = currentData;
     return currentDataCopy;
 }
 /**
@@ -311,4 +309,4 @@ function reset() {
 /**
  * Export the functions required by the window to run the program.
  */
-export { prepareButtonPress, prepareREPLHistory, prepareTextInput, prepareViewerDiv, handleButtonPress, interpretCommand, getMode, reset, HELP_MESSAGE, runView, runSearch, getCurrentData, };
+export { prepareButtonPress, prepareREPLHistory, prepareTextInput, prepareViewerDiv, handleButtonPress, interpretCommand, getMode, reset, runView, runSearch, getCurrentData, runLoadFile, createTable, };

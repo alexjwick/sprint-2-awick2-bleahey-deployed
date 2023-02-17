@@ -1,3 +1,6 @@
+/**
+ * A 2D array mocking the parsed data from band.csv
+ */
 const band = [
   ["firstname", "lastname", "instrument"],
   ["Giustina", "Burkle", "electric guitar"],
@@ -7,22 +10,17 @@ const band = [
   ["Abbie", "Capello", "electric guitar"],
 ];
 
-const ten_star = [
-  ["StarID", "ProperName", "X", "Y", "Z"],
-  [0, "Sol", 0, 0, 0],
-  [1, , 282.43485, 0.00449, 5.36884],
-  [2, , 43.04329, 0.00285, -15.24144],
-  [3, , 277.11358, 0.02422, 223.27753],
-  [3759, "96 G. Psc", 7.26388, 1.55643, 0.68697],
-  [70667, "Proxima Centauri", -0.47175, -0.36132, -1.15037],
-  [71454, "Rigel Kentaurus B", -0.50359, -0.42128, -1.1767],
-  [71457, "Rigel Kentaurus A", -0.50362, -0.42139, -1.17665],
-  [87666, "Barnard's Star", -0.01729, -1.81533, 0.14824],
-  [118721, , -2.28262, 0.64697, 0.29354],
-];
-
+/**
+ * Mocks searching parsed data (works only for parsed data from band.csv)
+ *
+ * @param parsedData data to be searched (won't work unless parsed from band.csv)
+ * @param column column to search (won't work unless it's a column in band.csv)
+ * @param value value to search for (won't work if it's not a value in band.csv)
+ * @returns
+ */
 function search(parsedData: string[][], column: string, value: string) {
   if (parsedData.toString() === band.toString()) {
+    //exhaustive list of cases for band.csv rows
     switch (column) {
       case "firstname" || 0:
         switch (value) {
@@ -73,6 +71,7 @@ function search(parsedData: string[][], column: string, value: string) {
         return [];
     }
   } else {
+    //safety case for bad mocking (bullying, if you will)
     console.log("Parsed data does not match mock data");
     return [];
   }

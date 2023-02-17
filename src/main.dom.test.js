@@ -41,16 +41,28 @@ import * as main from "./main";
 /**
  * Resets the DOM before every test
  */
+/** The box that the user types text input into. */
 var replInputBox;
+/** The submit button that causes the inputted command to be interpreted */
 var submitButton;
+/** A div element that displays the table or rows currently being viewed */
 var viewerDiv;
+/**
+ * The HTML that will be tested in this DOM test suite
+ */
 var START_HTML = "<div class=\"program\">\n<div class=\"repl\">\n  <div class=\"repl-history\"></div>\n  <div class=\"repl-input\">\n    <input\n      type=\"text\"\n      class=\"repl-command-box\"\n      placeholder=\"Enter command here\"\n    />\n    <button class=\"submit-button\">Submit</button>\n  </div>\n</div>\n<div class=\"viewer\"></div>\n</div>\n<script type=\"module\" src=\"../src/main.js\"></script>";
+// Runs before each test
 beforeEach(function () {
-    main.reset();
     document.body.innerHTML = START_HTML;
     findREPLInputBox();
     findSubmitButton();
+    findViewer();
+    main.reset();
 });
+/**
+ * Finds the REPL input box on the document and assigns it to the corresponding
+ * global variable if successful, printing to the console otherwise.
+ */
 function findREPLInputBox() {
     var maybeInputs = document.getElementsByClassName("repl-command-box");
     var maybeInput = maybeInputs.item(0);
@@ -67,6 +79,10 @@ function findREPLInputBox() {
         replInputBox = maybeInput;
     }
 }
+/**
+ * Finds the submit button on the document and assigns it to the corresponding
+ * global variable if successful, printing to the console otherwise.
+ */
 function findSubmitButton() {
     var maybeButtons = document.getElementsByClassName("submit-button");
     var maybeButton = maybeButtons.item(0);
@@ -80,6 +96,10 @@ function findSubmitButton() {
         submitButton = maybeButton;
     }
 }
+/**
+ * Finds the viewer div on the document and assigns it to the corresponding
+ * global variable if successful, printing to the console otherwise.
+ */
 function findViewer() {
     var maybeViewers = document.getElementsByClassName("viewer");
     var maybeViewer = maybeViewers.item(0);
@@ -93,6 +113,11 @@ function findViewer() {
         viewerDiv = maybeViewer;
     }
 }
+/**
+ * A helper function that mimicks a user running a command through the web page.
+ *
+ * @param command - the command to run
+ */
 function runCommandAsUser(command) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -108,10 +133,44 @@ function runCommandAsUser(command) {
         });
     });
 }
-test("repl-input exists", function () {
-    var repl_input = document.getElementsByClassName("repl-input");
-    expect(repl_input.length).toBe(1);
+/**
+ * Tests that the repl input section exists.
+ */
+test("repl input section exists", function () {
+    var replInput = document.getElementsByClassName("repl-input");
+    expect(replInput.length).toBe(1);
 });
+/**
+ * Tests that the repl command box exists.
+ */
+test("repl command box exists", function () {
+    var replCommandBox = document.getElementsByClassName("repl-command-box");
+    expect(replCommandBox.length).toBe(1);
+});
+/**
+ * Tests that the submit button exists.
+ */
+test("submit button exists", function () {
+    var submitButton = document.getElementsByClassName("submit-button");
+    expect(submitButton.length).toBe(1);
+});
+/**
+ * Tests that the repl history exists.
+ */
+test("repl history exists", function () {
+    var replHistory = document.getElementsByClassName("repl-history");
+    expect(replHistory.length).toBe(1);
+});
+/**
+ * Tests that the viewer exists.
+ */
+test("viewer exists", function () {
+    var viewer = document.getElementsByClassName("viewer");
+    expect(viewer.length).toBe(1);
+});
+/**
+ * Tests changing modes from brief to verbose and back to brief.
+ */
 test("user input: mode", function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -129,6 +188,9 @@ test("user input: mode", function () { return __awaiter(void 0, void 0, void 0, 
         }
     });
 }); });
+/**
+ * Tests that the load_file command with a valid csv loads the file correctly.
+ */
 test("user input: load_file w/ valid csv", function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -137,7 +199,7 @@ test("user input: load_file w/ valid csv", function () { return __awaiter(void 0
                 return [4 /*yield*/, runCommandAsUser("load_file band.csv")];
             case 1:
                 _a.sent();
-                expect(main.getCurrentData()).toBe([
+                expect(main.getCurrentData()).toStrictEqual([
                     ["firstname", "lastname", "instrument"],
                     ["Giustina", "Burkle", "electric guitar"],
                     ["Corry", "Marisa", "drums"],
@@ -145,12 +207,14 @@ test("user input: load_file w/ valid csv", function () { return __awaiter(void 0
                     ["Merrie", "Gunn", "bass guitar"],
                     ["Abbie", "Capello", "electric guitar"],
                 ]);
-                expect(screen.getAllByText("Loaded file: band.csv").length).toBe(1);
-                expect(screen.getAllByText("Error loading file 'band.csv'").length).toBe(0);
+                expect(screen.getAllByText("Loaded file: 'band.csv'").length).toBe(1);
                 return [2 /*return*/];
         }
     });
 }); });
+/**
+ * Tests the load_file command with an invalid csv.
+ */
 test("user input: load_file w/ invalid csv", function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -161,19 +225,20 @@ test("user input: load_file w/ invalid csv", function () { return __awaiter(void
                 _a.sent();
                 expect(main.getCurrentData()).toBeNull();
                 expect(screen.getAllByText("Error loading file 'invalidfile'").length).toBe(1);
-                expect(screen.getAllByText("Loaded file: invalidfile").length).toBe(0);
                 return [2 /*return*/];
         }
     });
 }); });
+/**
+ * Tests the view function in unloaded csv and loaded csv cases.
+ */
 test("user input: view", function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, runCommandAsUser("view")];
             case 1:
                 _a.sent();
-                expect(screen.getAllByText("Error loading table: table is null").length).toBe(1);
-                expect(screen.getAllByText("Displayed current table").length).toBe(0);
+                expect(screen.getAllByText("Error loading table: current data is null").length).toBe(1);
                 expect(viewerDiv.childElementCount).toBe(0);
                 return [4 /*yield*/, runCommandAsUser("load_file band.csv")];
             case 2:
@@ -183,18 +248,161 @@ test("user input: view", function () { return __awaiter(void 0, void 0, void 0, 
                 _a.sent();
                 expect(screen.getAllByText("Displayed current table").length).toBe(1);
                 expect(viewerDiv.childElementCount).toBe(1);
-                expect(screen.getAllByText("Error loading table: table is null").length).toBe(0);
                 return [2 /*return*/];
         }
     });
 }); });
+/**
+ * Tests search with correct column and value
+ */
+test("user input: search w/ valid column and value", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, runCommandAsUser("load_file band.csv")];
+            case 1:
+                _a.sent();
+                return [4 /*yield*/, runCommandAsUser("search instrument drums")];
+            case 2:
+                _a.sent();
+                expect(screen.getAllByText("Displayed results").length).toBe(1);
+                expect(viewerDiv.childElementCount).toBe(1);
+                return [2 /*return*/];
+        }
+    });
+}); });
+/**
+ * Tests search when the column is correct but the value is incorrect.
+ * Happy (belated) annoy squidward day.
+ */
+test("user input: search w/ valid column and invalid value", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, runCommandAsUser("load_file band.csv")];
+            case 1:
+                _a.sent();
+                return [4 /*yield*/, runCommandAsUser("search instrument mayonaise")];
+            case 2:
+                _a.sent();
+                expect(screen.getAllByText("No results found").length).toBe(1);
+                expect(viewerDiv.childElementCount).toBe(0);
+                return [2 /*return*/];
+        }
+    });
+}); });
+/**
+ * Tests search when the column is incorrect but the value is correct.
+ */
+test("user input: search w/ invalid column and valid value", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, runCommandAsUser("load_file band.csv")];
+            case 1:
+                _a.sent();
+                return [4 /*yield*/, runCommandAsUser("search condiment drums")];
+            case 2:
+                _a.sent();
+                expect(screen.getAllByText("No results found").length).toBe(1);
+                expect(viewerDiv.childElementCount).toBe(0);
+                return [2 /*return*/];
+        }
+    });
+}); });
+/**
+ * Tests search when the value and column are incorrect
+ */
+test("user input: search w/ invalid column and value", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, runCommandAsUser("load_file band.csv")];
+            case 1:
+                _a.sent();
+                return [4 /*yield*/, runCommandAsUser("search condiment mayo")];
+            case 2:
+                _a.sent();
+                expect(screen.getAllByText("No results found").length).toBe(1);
+                expect(viewerDiv.childElementCount).toBe(0);
+                return [2 /*return*/];
+        }
+    });
+}); });
+/**
+ * Tests search when no CSV data has been loaded yet.
+ */
+test("user input: search w/ no data loaded yet", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, runCommandAsUser("search instrument drums")];
+            case 1:
+                _a.sent();
+                expect(screen.getAllByText("Error searching: no data has been loaded").length).toBe(1);
+                expect(viewerDiv.childElementCount).toBe(0);
+                return [2 /*return*/];
+        }
+    });
+}); });
+/**
+ * Test search when no further arguments are passed.
+ */
+test("user input: search w/ no args", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, runCommandAsUser("search")];
+            case 1:
+                _a.sent();
+                expect(screen.getAllByText("Error searching: invalid number of arguments").length).toBe(1);
+                expect(viewerDiv.childElementCount).toBe(0);
+                return [2 /*return*/];
+        }
+    });
+}); });
+/**
+ * Tests the search case where only one argument is passed.
+ */
+test("user input: search w/ too few args", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, runCommandAsUser("search yadayada")];
+            case 1:
+                _a.sent();
+                expect(screen.getAllByText("Error searching: invalid number of arguments").length).toBe(1);
+                expect(viewerDiv.childElementCount).toBe(0);
+                return [2 /*return*/];
+        }
+    });
+}); });
+/**
+ * Tests the search case where too many arguments are passed as an input.
+ */
+test("user input: search w/ too many args", function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, runCommandAsUser("search radda radda radda")];
+            case 1:
+                _a.sent();
+                expect(screen.getAllByText("Error searching: invalid number of arguments").length).toBe(1);
+                expect(viewerDiv.childElementCount).toBe(0);
+                return [2 /*return*/];
+        }
+    });
+}); });
+/**
+ * Tests the help message displays a description of all functions.
+ */
 test("user input: help", function () { return __awaiter(void 0, void 0, void 0, function () {
+    var helpMessageString;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, runCommandAsUser("help")];
             case 1:
                 _a.sent();
-                expect(screen.getAllByText(main.HELP_MESSAGE).length).toBe(1);
+                helpMessageString = document
+                    .getElementsByTagName("p")[0]
+                    .innerHTML.toString();
+                expect(helpMessageString.includes("mode")).toBeTruthy();
+                expect(helpMessageString.includes("load_file")).toBeTruthy();
+                expect(helpMessageString.includes("view")).toBeTruthy();
+                expect(helpMessageString.includes("search")).toBeTruthy();
+                expect(helpMessageString.includes("help")).toBeTruthy();
                 return [2 /*return*/];
         }
     });

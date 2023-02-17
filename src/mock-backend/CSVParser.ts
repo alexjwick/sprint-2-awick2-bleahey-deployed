@@ -1,5 +1,13 @@
+/**
+ * Mocks a CSV parser by taking in a filepath and returning its array
+ * representation.
+ *
+ * @param filepath - the filepath to the CSV
+ * @return the array representation of the CSV or null if filepath is not recognized
+ */
 function parse(filepath: string) {
   switch (filepath) {
+    //case for the band csv file, located in data
     case "band.csv":
       return [
         ["firstname", "lastname", "instrument"],
@@ -9,6 +17,7 @@ function parse(filepath: string) {
         ["Merrie", "Gunn", "bass guitar"],
         ["Abbie", "Capello", "electric guitar"],
       ];
+    //case for the ten-star csv file, located in data
     case "ten-star.csv":
       return [
         ["StarID", "ProperName", "X", "Y", "Z"],

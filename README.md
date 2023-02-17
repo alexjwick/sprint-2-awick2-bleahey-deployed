@@ -80,7 +80,19 @@ There are no known errors or bugs in the program.
 The testing is split into two files: main.test.ts and main.dom.test.ts.
 
 The dom testing performs tests on the user-end functionality within the main
-method. This includes ...
+method. This includes:
+
+- Ensuring components exist upon load
+- Ensuring commands display the correct outputs and error messages
+- Ensuring the viewer contains a table when it should and doesn't when it
+  shouldn't
 
 The main test file tests some helper or supporting functions of main, without
-fully loading the user end application. This includes ...
+fully loading the user end application. Some of these tests may seem redundant
+when looked at the DOM tests, but this portion tests the base functionality
+while the DOM portion tests the visual output. Tests include:
+
+- Test cases for when the current data is null on view, search, and getting
+  the current data
+- String outputs of loading files
+- Creating tables (used in search and view)
