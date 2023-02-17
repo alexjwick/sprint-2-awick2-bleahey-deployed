@@ -171,11 +171,11 @@ test("user input: load_file w/ valid csv", async () => {
   await runCommandAsUser("load_file band.csv");
   expect(main.getCurrentData()).toStrictEqual([
     ["firstname", "lastname", "instrument"],
-    ["Giustina", "Burkle", "electric guitar"],
+    ["Giustina", "Burkle", "lute"],
     ["Corry", "Marisa", "drums"],
     ["Benita", "Sikorski", "keyboard"],
-    ["Merrie", "Gunn", "bass guitar"],
-    ["Abbie", "Capello", "electric guitar"],
+    ["Merrie", "Gunn", "recorder"],
+    ["Abbie", "Capello", "lute"],
   ]);
   expect(screen.getAllByText("Loaded file: 'band.csv'").length).toBe(1);
 });

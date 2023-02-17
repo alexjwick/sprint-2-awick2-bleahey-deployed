@@ -11,11 +11,11 @@ function parse(filepath: string) {
     case "band.csv":
       return [
         ["firstname", "lastname", "instrument"],
-        ["Giustina", "Burkle", "electric guitar"],
+        ["Giustina", "Burkle", "lute"],
         ["Corry", "Marisa", "drums"],
         ["Benita", "Sikorski", "keyboard"],
-        ["Merrie", "Gunn", "bass guitar"],
-        ["Abbie", "Capello", "electric guitar"],
+        ["Merrie", "Gunn", "recorder"],
+        ["Abbie", "Capello", "lute"],
       ];
     //case for the ten-star csv file, located in data
     case "ten-star.csv":
