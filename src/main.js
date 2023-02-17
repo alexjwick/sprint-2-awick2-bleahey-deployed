@@ -10,11 +10,17 @@ window.onload = function () {
     // The event name in that case is "click", not "keypress", and the type of the element
     // should be HTMLButtonElement. The handler function for a "click" takes no arguments.
 };
+/** The box that the user types text input into. */
 var replInputBox;
+/**A div element that displays the previous results of commands being run. */
 var replHistory;
+/** A div element that displays the table or rows currently being viewed */
 var viewerDiv;
+/** A boolean for whether the history mode is verbose or brief. */
 var isVerbose = false;
+/** A 2d array of the currently loaded data from the CSV. */
 var currentData;
+/** The help message to be displayed with the proper command */
 var helpMessage = "Program: CSVParser\n<br>\n<br>\nDescription:\nProvides functionality for a user that desires to explore a CSV file\ncorresponding to a filepath in the current project. Further command description\ncan be found below.\n<br>\n<br>\nCommands:\n<br>\n* mode - toggles viewer mode between verbose or brief (default is brief)\n<br>\n* load_file &lt;filepath&gt; - loads a file from the given filepath\n<br>\n* view - views the currently loaded file\n<br>\n* search &lt;column&gt; &lt;value&gt; - searches the currently loaded file for rows with the the given value in the given column\n<br>\n* help - displays this help message";
 /**
  * Prepares the components of the command box for receiving text input.
@@ -85,16 +91,19 @@ function prepareViewerDiv() {
     }
 }
 /**
- * Accepts a MouseEvent when the button is clicked and passes the current
- * value typed into the input box to the command interpeter function.
- *
- * @param MouseEvent - an event such as a button click
+ * When the button is clicked, passes the current value typed into the input
+ * box to the command interpeter function.
  */
-function handleButtonPress(event) {
+function handleButtonPress() {
     var command = replInputBox.value;
     replInputBox.value = "";
     interpretCommand(command);
 }
+/**
+ * Returns the current mode as a string.
+ *
+ * @return the current mode the program is in
+ */
 function getMode() {
     if (isVerbose) {
         return "verbose";
@@ -113,7 +122,7 @@ function getMode() {
 function interpretCommand(command) {
     if (command === "mode") {
         isVerbose = !isVerbose;
-        addToREPLHistory("mode", "Mode changed to " + getMode());
+        addToREPLHistory("mode", "Mode changed to ".concat(getMode()));
     }
     else if (command.startsWith("load_file")) {
         var filepath = command.substring(command.indexOf(" ") + 1);
@@ -123,7 +132,9 @@ function interpretCommand(command) {
         addToREPLHistory(command, runView());
     }
     else if (command.startsWith("search")) {
-        var fields = command.substring(command.indexOf(" ") + 1).split(" ");
+        var fields = command
+            .substring(command.indexOf(" ") + 1)
+            .split(" ");
         if (fields.length != 2) {
             console.log("Error searching: invalid number of arguments");
             addToREPLHistory(command, "Error searching: invalid number of arguments");
@@ -136,8 +147,8 @@ function interpretCommand(command) {
         addToREPLHistory(command, helpMessage);
     }
     else {
-        addToREPLHistory(command, "Error: unrecognized command.<br>\n      <br>\n      See help message below:<br>\n      " + helpMessage);
-        console.log("Unrecognized command, help message displayed");
+        addToREPLHistory(command, "Unrecognized command: ".concat(command, "\n      <br>\n      Enter \"help\" for more information"));
+        console.log("Unrecognized command: ".concat(command));
     }
 }
 /**
@@ -151,10 +162,10 @@ function runLoadFile(filepath) {
     var output;
     currentData = parse(filepath);
     if (currentData == null) {
-        output = "Error loading file";
+        output = "Error loading file '".concat(filepath, "'");
     }
     else {
-        output = "Loaded file: " + filepath;
+        output = "Loaded file: ".concat(filepath);
     }
     console.log(output);
     return output;
@@ -205,10 +216,12 @@ function runSearch(column, value) {
     return output;
 }
 /**
+ * Adds the given command and output to the REPL history. Formats the output to
+ * the REPL history based on the mode, which can be brief or verbose and is
+ * stored in the global boolean variable isVerbose.
  *
- * @param command
- * @param output
- * @returns
+ * @param command - the command to be added to the REPL history
+ * @param output - the output of the command to be added to the REPL history
  */
 function addToREPLHistory(command, output) {
     if (command == null || command == "") {
@@ -245,6 +258,11 @@ function addToREPLHistory(command, output) {
     replHistory.appendChild(elementToAdd);
     replHistory.scrollTop = replHistory.scrollHeight;
 }
+/**
+ * Creates an html table from a 2d array of strings.$
+ *
+ * @param data - A 2d array of strings that the table should represent
+ */
 function createTable(data) {
     var table = document.createElement("table");
     var tableBody = document.createElement("tbody");
@@ -266,9 +284,17 @@ function createTable(data) {
         viewerDiv.appendChild(table);
     }
 }
+/**
+ * Removes all child nodes from the given element.
+ *
+ * @param parent - the html element whose children should be removed
+ */
 function removeAllChildren(parent) {
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
     }
 }
+/**
+ * Export the functions required by the window to run the program.
+ */
 export { prepareButtonPress, prepareREPLHistory, prepareTextInput, prepareViewerDiv, handleButtonPress, interpretCommand, };

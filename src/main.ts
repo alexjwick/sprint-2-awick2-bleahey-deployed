@@ -13,12 +13,18 @@ window.onload = () => {
   // should be HTMLButtonElement. The handler function for a "click" takes no arguments.
 };
 
+/** The box that the user types text input into. */
 let replInputBox: HTMLInputElement;
+/**A div element that displays the previous results of commands being run. */
 let replHistory: HTMLDivElement;
+/** A div element that displays the table or rows currently being viewed */
 let viewerDiv: HTMLDivElement;
+/** A boolean for whether the history mode is verbose or brief. */
 let isVerbose: boolean = false;
+/** A 2d array of the currently loaded data from the CSV. */
 let currentData: string[][] | null;
 
+/** The help message to be displayed with the proper command */
 const helpMessage = `Program: CSVParser
 <br>
 <br>
@@ -43,7 +49,7 @@ Commands:
 /**
  * Prepares the components of the command box for receiving text input.
  */
-function prepareTextInput() {
+function prepareTextInput(): void {
   const maybeInputs: HTMLCollectionOf<Element> =
     document.getElementsByClassName("repl-command-box");
   const maybeInput: Element | null = maybeInputs.item(0);
@@ -63,7 +69,7 @@ function prepareTextInput() {
 /**
  * Prepares the submit button for handling clicks from the user.
  */
-function prepareButtonPress() {
+function prepareButtonPress(): void {
   const maybeButtons: HTMLCollectionOf<Element> =
     document.getElementsByClassName("submit-button");
   const maybeButton: Element | null = maybeButtons.item(0);
@@ -80,7 +86,7 @@ function prepareButtonPress() {
  * Prepares the history div for displaying the previous commands and output
  * from the user.
  */
-function prepareREPLHistory() {
+function prepareREPLHistory(): void {
   const maybeDivs: HTMLCollectionOf<Element> =
     document.getElementsByClassName("repl-history");
   const maybeDiv: Element | null = maybeDivs.item(0);
@@ -96,7 +102,7 @@ function prepareREPLHistory() {
 /**
  * Prepare the Viewer div for displaying view or search outputs.
  */
-function prepareViewerDiv() {
+function prepareViewerDiv(): void {
   const maybeDivs: HTMLCollectionOf<Element> =
     document.getElementsByClassName("viewer");
   const maybeDiv: Element | null = maybeDivs.item(0);
@@ -110,18 +116,21 @@ function prepareViewerDiv() {
 }
 
 /**
- * Accepts a MouseEvent when the button is clicked and passes the current
- * value typed into the input box to the command interpeter function.
- *
- * @param MouseEvent - an event such as a button click
+ * When the button is clicked, passes the current value typed into the input
+ * box to the command interpeter function.
  */
-function handleButtonPress(event: MouseEvent) {
+function handleButtonPress(): void {
   const command: string = replInputBox.value;
   replInputBox.value = "";
   interpretCommand(command);
 }
 
-function getMode() {
+/**
+ * Returns the current mode as a string.
+ *
+ * @return the current mode the program is in
+ */
+function getMode(): string {
   if (isVerbose) {
     return "verbose";
   }
@@ -137,17 +146,19 @@ function getMode() {
  *
  * @param command - the type of command to be performed
  */
-function interpretCommand(command: string) {
+function interpretCommand(command: string): void {
   if (command === "mode") {
     isVerbose = !isVerbose;
-    addToREPLHistory("mode", "Mode changed to " + getMode());
+    addToREPLHistory("mode", `Mode changed to ${getMode()}`);
   } else if (command.startsWith("load_file")) {
-    const filepath = command.substring(command.indexOf(" ") + 1);
+    const filepath: string = command.substring(command.indexOf(" ") + 1);
     addToREPLHistory(command, runLoadFile(filepath));
   } else if (command === "view") {
     addToREPLHistory(command, runView());
   } else if (command.startsWith("search")) {
-    const fields = command.substring(command.indexOf(" ") + 1).split(" ");
+    const fields: string[] = command
+      .substring(command.indexOf(" ") + 1)
+      .split(" ");
     if (fields.length != 2) {
       console.log("Error searching: invalid number of arguments");
       addToREPLHistory(command, "Error searching: invalid number of arguments");
@@ -159,12 +170,11 @@ function interpretCommand(command: string) {
   } else {
     addToREPLHistory(
       command,
-      `Error: unrecognized command.<br>
+      `Unrecognized command: ${command}
       <br>
-      See help message below:<br>
-      ` + helpMessage
+      Enter "help" for more information`
     );
-    console.log("Unrecognized command, help message displayed");
+    console.log(`Unrecognized command: ${command}`);
   }
 }
 
@@ -179,9 +189,9 @@ function runLoadFile(filepath: string): string {
   let output: string;
   currentData = parse(filepath);
   if (currentData == null) {
-    output = "Error loading file";
+    output = `Error loading file '${filepath}'`;
   } else {
-    output = "Loaded file: " + filepath;
+    output = `Loaded file: ${filepath}`;
   }
   console.log(output);
   return output;
@@ -232,12 +242,14 @@ function runSearch(column: string, value: string): string {
 }
 
 /**
+ * Adds the given command and output to the REPL history. Formats the output to
+ * the REPL history based on the mode, which can be brief or verbose and is
+ * stored in the global boolean variable isVerbose.
  *
- * @param command
- * @param output
- * @returns
+ * @param command - the command to be added to the REPL history
+ * @param output - the output of the command to be added to the REPL history
  */
-function addToREPLHistory(command: string, output: string) {
+function addToREPLHistory(command: string, output: string): void {
   if (command == null || command == "") {
     console.log("addToREPLHistory failed: command is empty");
     return;
@@ -253,7 +265,7 @@ function addToREPLHistory(command: string, output: string) {
 
   if (!hasOutput && !isVerbose) return;
 
-  const elementToAdd = document.createElement("p");
+  const elementToAdd: HTMLParagraphElement = document.createElement("p");
 
   let commandText: string;
   let outputText: string;
@@ -277,18 +289,23 @@ function addToREPLHistory(command: string, output: string) {
   replHistory.scrollTop = replHistory.scrollHeight;
 }
 
-function createTable(data: string[][]) {
-  const table = document.createElement("table");
-  const tableBody = document.createElement("tbody");
+/**
+ * Creates an html table from a 2d array of strings.$
+ *
+ * @param data - A 2d array of strings that the table should represent
+ */
+function createTable(data: string[][]): void {
+  const table: HTMLTableElement = document.createElement("table");
+  const tableBody: HTMLTableSectionElement = document.createElement("tbody");
 
   if (currentData == null) {
     console.log("Current table is null");
   } else {
     for (let row = 0; row < data.length; row++) {
-      const tableRow = document.createElement("tr");
+      const tableRow: HTMLTableRowElement = document.createElement("tr");
       for (let col = 0; col < data[row].length; col++) {
-        const cell = document.createElement("td");
-        const cellContent = document.createTextNode(data[row][col]);
+        const cell: HTMLTableCellElement = document.createElement("td");
+        const cellContent: Text = document.createTextNode(data[row][col]);
         cell.appendChild(cellContent);
         tableRow.appendChild(cell);
       }
@@ -299,12 +316,20 @@ function createTable(data: string[][]) {
   }
 }
 
-function removeAllChildren(parent: HTMLElement) {
+/**
+ * Removes all child nodes from the given element.
+ *
+ * @param parent - the html element whose children should be removed
+ */
+function removeAllChildren(parent: HTMLElement): void {
   while (parent.firstChild) {
     parent.removeChild(parent.firstChild);
   }
 }
 
+/**
+ * Export the functions required by the window to run the program.
+ */
 export {
   prepareButtonPress,
   prepareREPLHistory,
