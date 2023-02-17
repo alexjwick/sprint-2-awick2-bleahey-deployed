@@ -2,7 +2,14 @@
 
 #### https://github.com/cs0320-s2023/sprint-2-awick2-bleahey
 
-## Alex Wick (awick2) and Brendan Leahey (bleahey)
+## By Alex Wick (awick2) and Brendan Leahey (bleahey)
+
+Githubs:
+
+```
+[alexjwick](https://github.com/alexjwick)
+[bpleahey](https://github.com/bpleahey)
+```
 
 Both members worked collaboratively on a LiveShare on all portions of the
 project.
@@ -22,3 +29,7 @@ Estimated time: 12 hrs
 There are no known errors or bugs in the program.
 
 ## Tests
+
+```
+
+```
